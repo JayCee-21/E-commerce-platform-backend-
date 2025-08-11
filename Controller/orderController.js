@@ -65,23 +65,25 @@ try {
 
 //removing order by user
 const cancelOrder = async ( req, res ) => {
-    const userId = req.user._id
     const orderId = req.params.id
 
     try {
        //find the order
-    const order = await Order.findOne({orderId, userId})
+    const order = await Order.findById(orderId)
     if(!order) {
         return res.status(404).json({message: "Order not found"})
     }
-    if(order.status !== 'Pending')
-        return res.status(400).json({message: "Only pending orders can be cancelle"})
+    if(order.status !== 'pending')
+        return res.status(400).json({message: "Only pending orders can be cancelled"})
 
-    //delete order
-    await Order.findByIdAndDelete({orderId})
+    //delete order0
+     order.status = "cancelled"
+     await order.save()
+
+    await Order.findByIdAndDelete(orderId)
     res.status(200).json({message: "Order cancelled successfully"})     
     } catch (error) {
-        res.status(500).json(error)
+        res.status(500).json({error:error.message})
     }
 }
 

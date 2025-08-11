@@ -9,7 +9,7 @@ orderRouter
            .get('/order', authMiddleware, getOrders)
            .get('/orders', authMiddleware, adminCheck, getAllOrders)
            .put('/order/status/:id', authMiddleware, adminCheck, updateStatus)
-           .delete('/order/delete/:orderId', authMiddleware, cancelOrder)
+           .delete('/order/delete/:id', authMiddleware, cancelOrder)
 
 
 module.exports = orderRouter
