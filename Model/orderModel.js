@@ -10,7 +10,7 @@ const orderItems = new mongoose.Schema({
 
 const orderSchema = new mongoose.Schema({
     userId: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
-    products: [orderItems],
+    orderItems: [orderItems],
     totalOrderPrice: { type: Number, required: true},
     status: {type: String, default: "pending"}
 }, {timestamps: true})

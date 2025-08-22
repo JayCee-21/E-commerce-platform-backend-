@@ -1,5 +1,6 @@
 const User = require('../Model/userModel')
 const bcrypt = require('bcryptjs')
+const sendMail = require('../utils/sendEmail')
 
 const createUser = async(req,res) => {
     const { username, gmail, password } = req.body
@@ -24,7 +25,20 @@ const createUser = async(req,res) => {
           }
           const newUser = new User({...req.body, password: hashedPassword, admin: false})
           await newUser.save()
-          return res.status(200).json({message: "User Created Successfully"})
+
+          //send mail
+          try {
+            const mailObj = {
+               mailFrom: `E-commerce App ${process.env.EMAIL_USER}`,
+               mailTo: gmail,
+               subject: 'Welcome to Our E-commerce App',
+               body: `Hi ${username}, welcome to our store! We're glad to have you`
+            }
+            const info = await sendMail(mailObj)
+          } catch (error) {
+            console.log(error)
+          }
+          return res.status(201).json({message: "User Created Successfully"})
 
     } catch (error) {
         res.status(500).json(error)
